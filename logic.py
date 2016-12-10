@@ -69,6 +69,7 @@ class GameState(object):
     players = []
 
     def __init__(self):
+        # we should have a simple system to swap out classes to make it extensible
         pass
 
     @property
