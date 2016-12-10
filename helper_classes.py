@@ -24,3 +24,8 @@ class DefaultOrderList(OrderList):
         super().__init__()
         if orders is not None and len(orders) > self.max_orders:
             raise TooManyOrders("Bots can have at most {} orders; tried to have {}".format(self.max_orders, len(list)))
+
+
+class HexGrid(object):
+    # TODO: Implement this
+    pass
