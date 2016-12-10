@@ -32,7 +32,7 @@ class Bot(object):
 
 
 class PlayBoard(object):
-    _grid = [[]]
+    _grid = [[]]  # TODO: implement hexagonal grid; other devs can help
 
     def __init__(self):
         """Create an empty play board"""
