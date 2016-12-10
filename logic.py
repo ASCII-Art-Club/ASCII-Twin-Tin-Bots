@@ -27,7 +27,6 @@ class GameState(object):
     Because globals are bad.
     Directly modify properties.
     """
-
     bots = []
 
     def __init__(self):
