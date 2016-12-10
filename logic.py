@@ -13,7 +13,7 @@ class Bot(object):
     """
     Attribute API:
     bot_team - access team of bot
-    orders - acc
+    orders - access orders in bot
     """
 
     def __init__(self, initial_order: Order):
