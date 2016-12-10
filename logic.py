@@ -1,7 +1,7 @@
 from abc import ABCMeta
 
 
-# TODO: who calls what? See the GitHub Issue.
+# TODO: Who calls what? See the GitHub Issue.
 
 class Order(metaclass=ABCMeta):
     """All orders inherit from this order."""
