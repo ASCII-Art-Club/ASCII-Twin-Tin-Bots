@@ -20,7 +20,7 @@ class DefaultOrderList(OrderList):
 
     def __init__(self, orders=None):
         # This method is called every time an inherited list operation is run.
-        # See the comment below https://docs.python.org/3/library/collections.html#collections.UserList.
+        # See the comment below docs.python.org/3/library/collections.html#collections.UserList.
         super().__init__()
         if orders is not None and len(orders) > self.max_orders:
             raise TooManyOrders("Bots can have at most {} orders; tried to have {}".format(self.max_orders, len(list)))
