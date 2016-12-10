@@ -1,4 +1,5 @@
 from abc import ABCMeta
+from helper_classes import HexGrid
 
 
 # TODO: who calls what? See the GitHub Issue.
@@ -31,8 +32,7 @@ class Bot(object):
         ...
 
 
-class PlayBoard(object):
-    _grid = [[]]  # TODO: implement hexagonal grid; other devs can help
+class PlayBoard(HexGrid):
 
     def __init__(self):
         """Create an empty play board"""
@@ -48,7 +48,7 @@ class PlayBoard(object):
         pass
 
 
-class ProgrammingBoard(object):
+class ProgrammingBoard(HexGrid):
     # TODO: How does the programming board work?
     pass
 
