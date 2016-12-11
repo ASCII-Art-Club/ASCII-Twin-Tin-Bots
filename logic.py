@@ -21,13 +21,23 @@ class SpecialOrder(Order, metaclass=ABCMeta):
 #TODO: Implement these bot methods to bot
 
 class Forward(Order):
-    def execute(bot,distance):
-        bot.moveForward(distance)
+    def execute(bot):
+        bot.moveForward(1)
         raise NotImplementedError()
 
-class Rotate(Order):
-    def execute(bot, angle):
-        bot.rotate(angle)
+class ForwardTwice(Order):
+    def execute(bot):
+        bot.moveForward(2)
+        raise NotImplementedError()
+
+class RotateLeft(Order):
+    def execute(bot):
+        bot.rotate(-1)
+        raise NotImplementedError()
+
+class RotateRight(Order):
+    def execute(bot):
+        bot.rotate(1)
         raise NotImplementedError()
 
 class LoadCrystal(Order):
@@ -45,9 +55,46 @@ class Zap(Order):
         bot.zap(order)
         raise NotImplementedError()
 
+class RotateLeftTwice(SpecialOrder):
+    def execute(bot):
+        bot.rotate(-2)
+        raise NotImplementedError()
+
+class RotateRightTwice(SpecialOrder):
+    def execute(bot):
+        bot.rotate(2)
+        raise NotImplementedError()
+
 class AntiZap(SpecialOrder):
     def execute(bot):
         bot.setAntiZap(True)
+        raise NotImplementedError()
+
+class UTurn(SpecialOrder):
+    def execute(bot):
+        bot.rotate(3)
+        raise NotImplementedError()
+
+class ForwardThrice(SpecialOrder):
+    def execute(bot):
+        bot.moveForward(3)
+        raise NotImplementedError()
+
+class ForwardLoad(SpecialOrder):
+    def execute(bot):
+        bot.moveForward(1)
+        bot.loadCrystal()
+        raise NotImplementedError()
+
+class ForwardZap(SpecialOrder):
+    def execute(bot, order):
+        bot.moveForward(1)
+        bot.zap(order)
+        raise NotImplementedError()
+
+class Dash(SpecialOrder):
+    def execute(bot):
+        bot.dash()
         raise NotImplementedError()
 
 class Jump(SpecialOrder):
@@ -55,12 +102,26 @@ class Jump(SpecialOrder):
         bot.jump()
         raise NotImplementedError()
 
-    
+class BackUp(SpecialOrder):
+    def execute(bot):
+        bot.moveForward(-1)
+        raise NotImplementedError()
+
+class ZapTwice(SpecialOrder):
+    def execute(bot, order1, order2):
+        bot.zap(order1)
+        bot.zap(order2)
+        raise NotImplementedError()
+
 class AntiTheft(SpecialOrder):
     def execute(bot):
         bot.setAntiTheft(True)
         raise NotImplementedError()
 
+class ZapLongRange(SpecialOrder):
+    def execute(bot, order):
+        bot.zapLongRange(order)
+        raise NotImplementedError()
 
 class Bot(object):
     """
