@@ -1,4 +1,6 @@
 from abc import ABCMeta
+from helper_classes import OrderList
+from typing import List  # this is jus to help linters
 
 
 # TODO: who calls what? See the GitHub Issue.
@@ -6,122 +8,134 @@ from abc import ABCMeta
 class Order(metaclass=ABCMeta):
     """All orders inherit from this order."""
 
-    @staticmethod
-    def execute(bot):
+    @classmethod
+    def execute(cls, bot: Bot):
         raise NotImplementedError()
 
 
 class SpecialOrder(Order, metaclass=ABCMeta):
     """All special orders inherit from this order."""
 
-    @staticmethod
-    def execute(bot):
-        raise NotImplementedError()
-
-#TODO: Implement these bot methods to bot
 
 class Forward(Order):
-    def execute(bot):
-        bot.moveForward(1)
-        raise NotImplementedError()
+    forward_constant = 1
 
-class ForwardTwice(Order):
-    def execute(bot):
-        bot.moveForward(2)
-        raise NotImplementedError()
+    @classmethod
+    def execute(cls, bot):
+        bot.move_forward(cls.forward_constant)
 
-class RotateLeft(Order):
-    def execute(bot):
-        bot.rotate(-1)
-        raise NotImplementedError()
 
-class RotateRight(Order):
-    def execute(bot):
-        bot.rotate(1)
-        raise NotImplementedError()
+class ForwardTwice(Forward):
+    forward_constant = 2
+
+
+class Rotate(Order):
+    rotate_constant = 1
+
+    @classmethod
+    def execute(cls, bot):
+        bot.rotate(cls.rotate_constant)
+
+
+class RotateLeft(Rotate):
+    rotate_constant = -1
+
+
+class RotateRight(Rotate):
+    rotate_constant = 1
+
 
 class LoadCrystal(Order):
-    def execute(bot):
+    @classmethod
+    def execute(cls, bot):
         bot.loadCrystal()
         raise NotImplementedError()
 
+
 class UnLoadCrystal(Order):
-    def execute(bot):
+    @classmethod
+    def execute(cls, bot):
         bot.unLoadCrystal()
         raise NotImplementedError()
 
-class Zap(Order):
-    def execute(bot, order):
-        bot.zap(order)
-        raise NotImplementedError()
 
-class RotateLeftTwice(SpecialOrder):
-    def execute(bot):
-        bot.rotate(-2)
-        raise NotImplementedError()
+class RotateLeftTwice(Rotate, SpecialOrder):
+    rotate_constant = -1
 
-class RotateRightTwice(SpecialOrder):
-    def execute(bot):
-        bot.rotate(2)
-        raise NotImplementedError()
+
+class RotateRightTwice(Rotate, SpecialOrder):
+    rotate_constant = 2
+
 
 class AntiZap(SpecialOrder):
-    def execute(bot):
-        bot.setAntiZap(True)
+    @classmethod
+    def execute(cls, bot):
+        bot.anti_zap = True
         raise NotImplementedError()
 
-class UTurn(SpecialOrder):
-    def execute(bot):
-        bot.rotate(3)
-        raise NotImplementedError()
 
-class ForwardThrice(SpecialOrder):
-    def execute(bot):
-        bot.moveForward(3)
-        raise NotImplementedError()
+class AntiTheft(SpecialOrder):
+    @classmethod
+    def execute(cls, bot):
+        bot.anti_theft = True
+
+
+class UTurn(Rotate, SpecialOrder):
+    rotate_constant = 3
+
+
+class ForwardThrice(Forward, SpecialOrder):
+    forward_constant = 3
+
 
 class ForwardLoad(SpecialOrder):
-    def execute(bot):
+    @classmethod
+    def execute(cls, bot):
         bot.moveForward(1)
         bot.loadCrystal()
         raise NotImplementedError()
 
-class ForwardZap(SpecialOrder):
-    def execute(bot, order):
-        bot.moveForward(1)
-        bot.zap(order)
-        raise NotImplementedError()
 
 class Dash(SpecialOrder):
-    def execute(bot):
+    @classmethod
+    def execute(cls, bot):
         bot.dash()
-        raise NotImplementedError()
+
 
 class Jump(SpecialOrder):
-    def execute(bot):
+    @classmethod
+    def execute(cls, bot):
         bot.jump()
-        raise NotImplementedError()
 
-class BackUp(SpecialOrder):
-    def execute(bot):
-        bot.moveForward(-1)
-        raise NotImplementedError()
 
-class ZapTwice(SpecialOrder):
-    def execute(bot, order1, order2):
-        bot.zap(order1)
-        bot.zap(order2)
-        raise NotImplementedError()
+class BackUp(Forward, SpecialOrder):
+    forward_constant = -1
 
-class AntiTheft(SpecialOrder):
-    def execute(bot):
-        bot.setAntiTheft(True)
-        raise NotImplementedError()
 
-class ZapLongRange(SpecialOrder):
-    def execute(bot, order):
-        bot.zapLongRange(order)
-        raise NotImplementedError()
+class Zap(Order):
+    long_range, times = False, 2
+
+    @classmethod
+    def execute(cls, bot):
+        bot.zap(times=cls.times, long_range=cls.long_range)
+
+
+class ZapTwice(Zap, SpecialOrder):
+    times = 2
+
+
+class ZapLongRange(Zap, SpecialOrder):
+    long_range = True
+
+
+class ForwardZap(Forward, Zap, SpecialOrder):
+    forward_constant = 1
+
+    @classmethod
+    def execute(cls, bot):
+        Forward.execute(bot)
+        Zap.execute(bot)
+
 
 class Bot(object):
     """
@@ -130,9 +144,30 @@ class Bot(object):
     orders - access orders in bot
     """
 
-    def __init__(self, initial_order: Order):
-        self.orders = initial_order
+    def __init__(self, initial_orders: OrderList):
+        self.orders = initial_orders
         ...
+
+    # TODO: Implement these methods
+
+    def move_forward(self, units):
+        raise NotImplementedError()
+
+    def rotate(self, direction):
+        raise NotImplementedError()
+
+    def zap(self, times=1, long_range=False):
+        raise NotImplementedError()
+        if times > 1:
+            self.zap(times - 1, long_range=long_range)
+
+    def jump(self):
+        raise NotImplementedError()
+
+    def dash(self):
+        raise NotImplementedError()
+    # TODO: either make anti_zap and anti_theft properties (getter/setter)
+    #  if they are not-permanent, or make them regular ol' attributes.
 
 
 class PlayBoard(object):
@@ -159,8 +194,8 @@ class ProgrammingBoard(object):
 
 class Player(object):
     def __init__(self):
-        self.owned_orders = []  # type: Order
-        self.owned_bots = []  # type: Bot
+        self.owned_orders = []  # type: List[Order]
+        self.owned_bots = []  # type: List[Bot]
 
 
 class GameState(object):
