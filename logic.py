@@ -18,6 +18,49 @@ class SpecialOrder(Order, metaclass=ABCMeta):
     def execute(bot):
         raise NotImplementedError()
 
+#TODO: Implement these bot methods to bot
+
+class Forward(Order):
+    def execute(bot,distance):
+        bot.moveForward(distance)
+        raise NotImplementedError()
+
+class Rotate(Order):
+    def execute(bot, angle):
+        bot.rotate(angle)
+        raise NotImplementedError()
+
+class LoadCrystal(Order):
+    def execute(bot):
+        bot.loadCrystal()
+        raise NotImplementedError()
+
+class UnLoadCrystal(Order):
+    def execute(bot):
+        bot.unLoadCrystal()
+        raise NotImplementedError()
+
+class Zap(Order):
+    def execute(bot, order):
+        bot.zap(order)
+        raise NotImplementedError()
+
+class AntiZap(SpecialOrder):
+    def execute(bot):
+        bot.setAntiZap(True)
+        raise NotImplementedError()
+
+class Jump(SpecialOrder):
+    def execute(bot):
+        bot.jump()
+        raise NotImplementedError()
+
+    
+class AntiTheft(SpecialOrder):
+    def execute(bot):
+        bot.setAntiTheft(True)
+        raise NotImplementedError()
+
 
 class Bot(object):
     """
